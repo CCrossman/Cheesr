@@ -15,7 +15,7 @@ public final class Cart implements Serializable {
 
 	@Getter
 	@Setter
-	private Address billingAddress = null;
+	private Address billingAddress = new Address(null, null, null, null, null);
 
 	public BigDecimal getTotal() {
 		BigDecimal total = BigDecimal.ZERO;

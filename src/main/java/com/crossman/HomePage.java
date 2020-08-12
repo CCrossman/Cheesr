@@ -30,28 +30,7 @@ public class HomePage extends CheesrPage {
 				});
 			}
 		});
-		add(new ListView("cart", new PropertyModel(this, "cart.cheeses")) {
-			@Override
-			protected void populateItem(ListItem item) {
-				Cheese cheese = (Cheese) item.getModelObject();
-				item.add(new Label("name", cheese.getName()));
-				item.add(new Label("price", "$" + cheese.getPrice()));
-				item.add(new Link("remove", item.getModel()) {
-					@Override
-					public void onClick() {
-						Cheese selected = (Cheese) getModelObject();
-						getCart().getCheeses().remove(selected);
-					}
-				});
-			}
-		});
-		add(new Label("total", new Model() {
-			@Override
-			public Object getObject() {
-				NumberFormat nf = NumberFormat.getCurrencyInstance();
-				return nf.format(getCart().getTotal());
-			}
-		}));
+		add(new ShoppingCartPanel("shoppingcart", getCart()));
 		add(new Link("checkout") {
 			@Override
 			public void onClick() {
