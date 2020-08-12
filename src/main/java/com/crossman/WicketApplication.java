@@ -7,8 +7,12 @@ import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.file.IResourceFinder;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.UrlResourceStream;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +41,24 @@ public class WicketApplication extends WebApplication {
 
 	public Class<?> getHomePage() {
 		return HomePage.class;
+	}
+
+	@Override
+	protected void init() {
+		final IResourceFinder defaultResourceFinder = getResourceFinder();
+
+		// retrieve resources from the /resource directory when deployed to Tomcat
+		getResourceSettings().setResourceFinder(new IResourceFinder() {
+			@Override
+			public IResourceStream find(Class clazz, String pathname) {
+				final String name = pathname.substring(pathname.lastIndexOf('/') + 1);
+				final URL resource = Thread.currentThread().getContextClassLoader().getResource(name);
+				if (resource == null) {
+					return defaultResourceFinder.find(clazz,pathname);
+				}
+				return new UrlResourceStream(resource);
+			}
+		});
 	}
 
 	@Override
