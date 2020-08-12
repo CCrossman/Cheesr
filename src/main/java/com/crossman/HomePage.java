@@ -4,6 +4,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
@@ -15,6 +16,11 @@ import java.text.NumberFormat;
 public class HomePage extends CheesrPage {
 
 	public HomePage() {
+		this(null);
+	}
+
+	public HomePage(String message) {
+		add(new FeedbackPanel("feedback"));
 		add(new ListView("cheeses", getCheeses()) {
 			@Override
 			protected void populateItem(ListItem item) {
@@ -42,5 +48,9 @@ public class HomePage extends CheesrPage {
 				return !getCart().getCheeses().isEmpty();
 			}
 		});
+
+		if (message != null) {
+			info(message);
+		}
 	}
 }

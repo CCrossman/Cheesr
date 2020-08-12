@@ -6,6 +6,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 
+import java.math.BigDecimal;
+
 public class CheckoutPage extends CheesrPage {
 
 	public CheckoutPage() {
@@ -31,7 +33,9 @@ public class CheckoutPage extends CheesrPage {
 		form.add(new Link("order") {
 			@Override
 			public void onClick() {
-				Cart cart = getCart();
+				final Cart cart = getCart();
+				final int cheesesSold = cart.getCheeses().size();
+				final BigDecimal priceSold = cart.getTotal();
 
 				// TODO: charge customer
 				// TODO: ship cheeses
@@ -39,7 +43,7 @@ public class CheckoutPage extends CheesrPage {
 				cart.getCheeses().clear();
 
 				// return to front page
-				setResponsePage(HomePage.class);
+				setResponsePage(new HomePage("Sold " + cheesesSold + " cheeses for $" + priceSold));
 			}
 		});
 
