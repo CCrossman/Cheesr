@@ -1,11 +1,42 @@
 <html>
-    <head>
-        <title>Wicket Quickstart Archetype Homepage</title>
-    </head>
-    <body>
-        <strong>Wicket Quickstart Archetype Homepage</strong>
-        <br/><br/>
-        <span wicket:id="message">message will be here</span>
-    </body>
+<head>
+    <title>Cheesr - Making cheese taste beta</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+<div id="container">
+    <div id="header"></div>
+    <div id="content">
+        <div id="main">
+            <div wicket:id="cheeses" class="cheese">
+                <h3 wicket:id="name">Name of Cheese</h3>
+                <p>
+                    <span wicket:id="price">$0.00</span>
+                    <a wicket:id="add" href="#">Add to Cart</a>
+                </p>
+            </div>
+        </div>
+        <div id="cart">
+            <h3>Your Selection</h3>
+            <table>
+                <tbody>
+                <tr wicket:id="cart">
+                    <td wicket:id="name">Gouda</td>
+                    <td wicket:id="price">$2.99</td>
+                    <td><a wicket:id="remove" href="#">Remove</a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr class="total">
+                    <th>Total</th>
+                    <td wicket:id="total">$0.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                </tfoot>
+            </table>
+            <input type="button" wicket:id="checkout" value="Checkout" />
+        </div> <!-- cart -->
+    </div> <!-- content -->
+</div> <!-- container -->
+</body>
 </html>
-
