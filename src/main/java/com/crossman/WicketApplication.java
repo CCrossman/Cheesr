@@ -1,6 +1,5 @@
 package com.crossman;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.wicket.Application;
 import org.apache.wicket.Request;
@@ -10,30 +9,15 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
 
-import java.math.BigDecimal;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor
 public class WicketApplication extends WebApplication {
-	@Getter
-	private final List<Cheese> cheeses = Collections.unmodifiableList(Arrays.asList(
-			new Cheese("Gouda", BigDecimal.valueOf(1.65)),
-			new Cheese("Edam", BigDecimal.valueOf(1.05)),
-			new Cheese("Maasdam", BigDecimal.valueOf(2.35)),
-			new Cheese("Brie", BigDecimal.valueOf(3.15)),
-			new Cheese("Buxton Blue", BigDecimal.valueOf(0.99)),
-			new Cheese("Parmesan", BigDecimal.valueOf(1.99)),
-			new Cheese("Cheddar", BigDecimal.valueOf(2.95)),
-			new Cheese("Roquefort", BigDecimal.valueOf(1.67)),
-			new Cheese("Boursin", BigDecimal.valueOf(1.33)),
-			new Cheese("Camembert", BigDecimal.valueOf(1.69)),
-			new Cheese("Emmental", BigDecimal.valueOf(2.39)),
-			new Cheese("Reblochon", BigDecimal.valueOf(2.99))
-	));
+	private final Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/cheesr", System.getenv("POSTGRES_USERNAME"), System.getenv("POSTGRES_PASSWORD"));
 
 	public static WicketApplication get() {
 		return (WicketApplication) Application.get();
@@ -43,8 +27,21 @@ public class WicketApplication extends WebApplication {
 		return HomePage.class;
 	}
 
+	public List<Cheese> getCheeses() {
+		try (Connection connection = sql2o.open()) {
+			return connection.createQuery("SELECT name, price from cheeses")
+					.executeAndFetch(Cheese.class);
+		}
+	}
+
 	@Override
 	protected void init() {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+
 		final IResourceFinder defaultResourceFinder = getResourceFinder();
 
 		// retrieve resources from the /resource directory when deployed to Tomcat

@@ -17,4 +17,22 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2020-08-13-002" author="Chris">
+        <sql>
+            INSERT INTO cheeses(name, price)
+            VALUES	('Gouda', 1.65),
+                    ('Edam', 1.05),
+                    ('Maasdam', 2.35),
+                    ('Brie', 3.15),
+                    ('Buxton Blue', 0.99),
+                    ('Parmesan', 1.99),
+                    ('Cheddar', 2.95),
+                    ('Roquefort', 1.67),
+                    ('Boursin', 1.33),
+                    ('Camembert', 1.69),
+                    ('Emmental', 2.39),
+                    ('Reblochon', 2.99);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
