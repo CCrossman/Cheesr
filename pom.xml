@@ -148,13 +148,31 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <urls>
+                                <url>file:///${project.basedir}/src/main/resources/application.properties</url>
+                            </urls>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
                     <changeLogFile>dbchangelog.xml</changeLogFile>
                     <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/cheesr</url>
+                    <url>${POSTGRES_URL}</url>
                     <username>${env.POSTGRES_USERNAME}</username>
                     <password>${env.POSTGRES_PASSWORD}</password>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
