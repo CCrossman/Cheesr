@@ -12,12 +12,14 @@ import org.apache.wicket.util.resource.UrlResourceStream;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.io.*;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 
 @NoArgsConstructor
 public class WicketApplication extends WebApplication {
-	private final Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/cheesr", System.getenv("POSTGRES_USERNAME"), System.getenv("POSTGRES_PASSWORD"));
+	private Sql2o sql2o;
 
 	public static WicketApplication get() {
 		return (WicketApplication) Application.get();
@@ -36,15 +38,26 @@ public class WicketApplication extends WebApplication {
 
 	@Override
 	protected void init() {
+		// load properties from application.properties file
+		Properties properties = new Properties();
+		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties")) {
+			properties.load(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// initialize database connection proxy
+		this.sql2o = new Sql2o(properties.getProperty("POSTGRES_URL"), System.getenv("POSTGRES_USERNAME"), System.getenv("POSTGRES_PASSWORD"));
+
+		// initialize database driver
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 
-		final IResourceFinder defaultResourceFinder = getResourceFinder();
-
 		// retrieve resources from the /resource directory when deployed to Tomcat
+		final IResourceFinder defaultResourceFinder = getResourceFinder();
 		getResourceSettings().setResourceFinder(new IResourceFinder() {
 			@Override
 			public IResourceStream find(Class clazz, String pathname) {
