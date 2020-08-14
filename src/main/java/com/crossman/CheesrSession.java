@@ -6,7 +6,7 @@ import org.apache.wicket.protocol.http.WebSession;
 
 public class CheesrSession extends WebSession {
 	@Getter
-	private Cart cart = new Cart();
+	private final Cart cart = new Cart();
 
 	protected CheesrSession(Request request) {
 		super(request);
