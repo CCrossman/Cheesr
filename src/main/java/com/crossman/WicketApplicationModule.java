@@ -31,5 +31,7 @@ public final class WicketApplicationModule extends AbstractModule {
 
 		final Sql2o sql2o = new Sql2o(properties.getProperty("POSTGRES_URL"), System.getenv("POSTGRES_USERNAME"), System.getenv("POSTGRES_PASSWORD"));
 		bind(Sql2o.class).toInstance(sql2o);
+
+		bind(Encryptor.class).toInstance(DummyEncryptor.instance);
 	}
 }

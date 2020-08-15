@@ -30,7 +30,7 @@ public class WicketApplication extends WebApplication {
 	}
 
 	public Class<?> getHomePage() {
-		return HomePage.class;
+		return LoginPage.class;
 	}
 
 	@Override

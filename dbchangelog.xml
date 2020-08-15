@@ -35,4 +35,21 @@
                     ('Reblochon', 2.99);
         </sql>
     </changeSet>
+
+    <changeSet id="2020-08-15-001" author="Chris">
+        <createTable tableName="users">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="users_pkey" />
+            </column>
+            <column name="username" type="text">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="password" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
