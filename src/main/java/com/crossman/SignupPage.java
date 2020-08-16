@@ -46,7 +46,7 @@ public class SignupPage extends WebPage {
 					}
 				} catch (Exception ex) {
 					PageParameters pp = new PageParameters();
-					pp.add("error", ex.getLocalizedMessage());
+					pp.add("error", ex.getMessage());
 					setResponsePage(LoginPage.class, pp);
 				}
 			}

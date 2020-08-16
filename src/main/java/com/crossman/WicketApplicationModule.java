@@ -29,9 +29,11 @@ public final class WicketApplicationModule extends AbstractModule {
 			throw new RuntimeException(e);
 		}
 
+		// initialize the database connection proxy
 		final Sql2o sql2o = new Sql2o(properties.getProperty("POSTGRES_URL"), System.getenv("POSTGRES_USERNAME"), System.getenv("POSTGRES_PASSWORD"));
 		bind(Sql2o.class).toInstance(sql2o);
 
-		bind(Encryptor.class).toInstance(DummyEncryptor.instance);
+		// initialize the encryptor
+		bind(Encryptor.class).toInstance(new DefaultEncryptor(properties.getProperty("ENC_SECRET"), properties.getProperty("ENC_SALT")));
 	}
 }

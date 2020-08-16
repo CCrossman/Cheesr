@@ -45,7 +45,7 @@ public class LoginPage extends CheesrPage {
 					}
 				} catch (Exception ex) {
 					PageParameters pp = new PageParameters();
-					pp.add("error", ex.getLocalizedMessage());
+					pp.add("error", ex.getMessage());
 					setResponsePage(LoginPage.class, pp);
 				}
 			}
