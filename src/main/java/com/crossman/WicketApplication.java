@@ -8,6 +8,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -46,6 +47,14 @@ public class WicketApplication extends WebApplication {
 					return defaultResourceFinder.find(clazz,pathname);
 				}
 				return new UrlResourceStream(resource);
+			}
+		});
+
+		// this is how we authorize
+		getSecuritySettings().setAuthorizationStrategy(new SimplePageAuthorizationStrategy(IRequireAuthorization.class, LoginPage.class) {
+			@Override
+			protected boolean isAuthorized() {
+				return ((CheesrSession)Session.get()).getUsername() != null;
 			}
 		});
 	}

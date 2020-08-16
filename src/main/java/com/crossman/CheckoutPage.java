@@ -8,7 +8,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.math.BigDecimal;
 
-public class CheckoutPage extends CheesrPage {
+public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 
 	public CheckoutPage() {
 		add(new FeedbackPanel("feedback"));
@@ -38,6 +38,8 @@ public class CheckoutPage extends CheesrPage {
 				final BigDecimal priceSold = cart.getTotal();
 
 				// TODO: charge customer
+				System.err.println("charging customer '" + getCheesrSession().getUsername() + "'");
+
 				// TODO: ship cheeses
 				// clean out shopping cart
 				cart.getCheeses().clear();

@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 /**
  * Homepage
  */
-public class HomePage extends CheesrPage {
+public class HomePage extends CheesrPage implements IRequireAuthorization {
 
 	public HomePage() {
 		this(null);

@@ -10,10 +10,10 @@
 
 <span>Don't have an account? <wicket:link><a href="SignupPage.html">Create one.</a></wicket:link></span><br/>
 
-<form action="#" method="post">
+<form wicket:id="form" action="#" method="post">
     <div class="container">
-        <label><b>Username: </b><input type="text" placeholder="Enter Username" name="uname" required></label>
-        <label><b>Password: </b><input type="password" placeholder="Enter Password" name="psw" required></label>
+        <label><b>Username: </b><input wicket:id="usr" type="text" placeholder="Enter Username" name="uname" required></label>
+        <label><b>Password: </b><input wicket:id="pwd" type="password" placeholder="Enter Password" name="psw" required></label>
         <button type="submit">Login</button>
     </div>
 </form>
