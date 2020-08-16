@@ -1,5 +1,6 @@
 package com.crossman;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -10,14 +11,8 @@ import org.sql2o.Sql2o;
 
 public class LoginPage extends CheesrPage {
 
-	public LoginPage() {
-		this(null);
-	}
-
-	public LoginPage(Message message) {
-		if (message != null) {
-			message.apply(this);
-		}
+	public LoginPage(PageParameters pageParameters) {
+		super(pageParameters);
 
 		add(new FeedbackPanel("feedback"));
 
@@ -41,13 +36,17 @@ public class LoginPage extends CheesrPage {
 							.executeScalar(Long.class);
 
 					if (count == 0) {
-						setResponsePage(new LoginPage(Message.warn("User '" + username + "' not found or incorrect password")));
+						PageParameters pp = new PageParameters();
+						pp.add("message", "User '" + username + "' not found or incorrect password");
+						setResponsePage(LoginPage.class, pp);
 					} else {
 						getCheesrSession().setUsername(username);
 						setResponsePage(HomePage.class);
 					}
 				} catch (Exception ex) {
-					setResponsePage(new LoginPage(Message.error(ex)));
+					PageParameters pp = new PageParameters();
+					pp.add("error", ex.getLocalizedMessage());
+					setResponsePage(LoginPage.class, pp);
 				}
 			}
 		};

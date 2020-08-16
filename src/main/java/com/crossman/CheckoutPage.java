@@ -1,5 +1,6 @@
 package com.crossman;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -10,7 +11,9 @@ import java.math.BigDecimal;
 
 public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 
-	public CheckoutPage() {
+	public CheckoutPage(PageParameters pageParameters) {
+		super(pageParameters);
+
 		add(new FeedbackPanel("feedback"));
 
 		Form form = new Form("form");
@@ -45,7 +48,9 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 				cart.getCheeses().clear();
 
 				// return to front page
-				setResponsePage(new HomePage("Sold " + cheesesSold + " cheeses for $" + priceSold));
+				PageParameters pp = new PageParameters();
+				pp.add("message", "Sold " + cheesesSold + " cheeses for $" + priceSold);
+				setResponsePage(HomePage.class, pp);
 			}
 		});
 

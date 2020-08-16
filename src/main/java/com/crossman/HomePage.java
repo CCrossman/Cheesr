@@ -1,5 +1,6 @@
 package com.crossman;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -12,11 +13,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
  */
 public class HomePage extends CheesrPage implements IRequireAuthorization {
 
-	public HomePage() {
-		this(null);
-	}
+	public HomePage(PageParameters pageParameters) {
+		super(pageParameters);
 
-	public HomePage(String message) {
 		add(new FeedbackPanel("feedback"));
 
 		PageableListView cheeses = new PageableListView("cheeses", getCheeses(), 5) {
@@ -40,7 +39,7 @@ public class HomePage extends CheesrPage implements IRequireAuthorization {
 		add(new Link("checkout") {
 			@Override
 			public void onClick() {
-				HomePage.this.setResponsePage(new CheckoutPage());
+				HomePage.this.setResponsePage(CheckoutPage.class);
 			}
 
 			@Override
@@ -48,9 +47,5 @@ public class HomePage extends CheesrPage implements IRequireAuthorization {
 				return !getCart().getCheeses().isEmpty();
 			}
 		});
-
-		if (message != null) {
-			info(message);
-		}
 	}
 }

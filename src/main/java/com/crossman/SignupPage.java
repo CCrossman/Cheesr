@@ -1,5 +1,6 @@
 package com.crossman;
 
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -35,12 +36,18 @@ public class SignupPage extends WebPage {
 								.addParameter("pwd", password)
 								.executeUpdate();
 
-						setResponsePage(new LoginPage(Message.info("User '" + username + "' was registered")));
+						PageParameters pp = new PageParameters();
+						pp.add("message", "User '" + username + "' was registered");
+						setResponsePage(LoginPage.class, pp);
 					} else {
-						setResponsePage(new LoginPage(Message.warn("User '" + username + "' already exists")));
+						PageParameters pp = new PageParameters();
+						pp.add("message", "User '" + username + "' already exists");
+						setResponsePage(LoginPage.class, pp);
 					}
 				} catch (Exception ex) {
-					setResponsePage(new LoginPage(Message.error(ex)));
+					PageParameters pp = new PageParameters();
+					pp.add("error", ex.getLocalizedMessage());
+					setResponsePage(LoginPage.class, pp);
 				}
 			}
 		};
