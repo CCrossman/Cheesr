@@ -52,4 +52,32 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2020-08-16-001" author="Chris">
+        <createTable tableName="addresses">
+            <column name="username" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="kind" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="text">
+            </column>
+            <column name="street" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="city" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="state" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="zip" type="text">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="addresses" columnNames="username, kind"
+                             constraintName="addresses_username_kind_uniq"
+        />
+    </changeSet>
 </databaseChangeLog>

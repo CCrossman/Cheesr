@@ -11,4 +11,8 @@ public class Address implements Serializable {
 	String city;
 	String state;
 	String zip;
+
+	public boolean isNil() {
+		return name == null && street == null && city == null && state == null && zip == null;
+	}
 }

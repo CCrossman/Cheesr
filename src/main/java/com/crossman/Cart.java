@@ -13,10 +13,6 @@ public final class Cart implements Serializable {
 	@Setter
 	private List<Cheese> cheeses = new ArrayList<>();
 
-	@Getter
-	@Setter
-	private Address billingAddress = new Address(null, null, null, null, null);
-
 	public BigDecimal getTotal() {
 		BigDecimal total = BigDecimal.ZERO;
 		if (cheeses != null) {

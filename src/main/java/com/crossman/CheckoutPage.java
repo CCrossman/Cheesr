@@ -1,11 +1,12 @@
 package com.crossman;
 
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.PropertyModel;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
 
 import java.math.BigDecimal;
 
@@ -17,14 +18,22 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 		add(new FeedbackPanel("feedback"));
 
 		Form form = new Form("form");
-		add(form);
+		try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
+			Address address = c.createQuery("SELECT name, street, city, state, zip from addresses where username = :usr and kind = 'HOME'")
+					.addParameter("usr", getCheesrSession().getUsername())
+					.executeAndFetchFirst(AddressResultSetHandler.instance);
+			if (address == null || address.isNil()) {
+				setResponsePage(ProfilePage.class);
+				return;
+			}
 
-		Address address = getCart().getBillingAddress();
-		form.add(new TextField("name", new PropertyModel(address, "name")).setRequired(true));
-		form.add(new TextField("street", new PropertyModel(address, "street")).setRequired(true));
-		form.add(new TextField("city", new PropertyModel(address, "city")).setRequired(true));
-		form.add(new TextField("state", new PropertyModel(address, "state")).setRequired(true));
-		form.add(new TextField("zip", new PropertyModel(address, "zip")).setRequired(true));
+			form.add(new Label("name", address.getName()));
+			form.add(new Label("street", address.getStreet()));
+			form.add(new Label("city", address.getCity()));
+			form.add(new Label("state", address.getState()));
+			form.add(new Label("zip", address.getZip()));
+		}
+		add(form);
 
 		form.add(new Link("cancel") {
 			@Override
@@ -56,4 +65,5 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 
 		add(new ShoppingCartPanel("shoppingcart", getCart()));
 	}
+
 }

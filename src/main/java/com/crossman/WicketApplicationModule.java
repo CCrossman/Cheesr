@@ -2,9 +2,13 @@ package com.crossman;
 
 import com.google.inject.AbstractModule;
 import org.sql2o.Sql2o;
+import org.sql2o.converters.Converter;
+import org.sql2o.quirks.NoQuirks;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public final class WicketApplicationModule extends AbstractModule {
