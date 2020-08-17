@@ -2,12 +2,10 @@ package com.crossman;
 
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -81,12 +79,5 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 				setResponsePage(HomePage.class);
 			}
 		});
-//
-//		form.add(new Link("save") {
-//			@Override
-//			public void onClick() {
-//
-//			}
-//		});
 	}
 }

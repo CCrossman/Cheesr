@@ -24,7 +24,7 @@ public class WicketApplication extends WebApplication {
 	@Getter
 	private static final Injector injector = Guice.createInjector(new WicketApplicationModule());
 
-	private final Sql2o sql2o = injector.getInstance(Sql2o.class);
+	private static final Sql2o sql2o = injector.getInstance(Sql2o.class);
 
 	public static WicketApplication get() {
 		return (WicketApplication) Application.get();

@@ -1,6 +1,5 @@
 package com.crossman;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
