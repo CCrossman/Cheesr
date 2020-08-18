@@ -97,4 +97,8 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2020-08-18-002" author="Chris">
+        <dropColumn tableName="orders" columnName="updated" />
+    </changeSet>
 </databaseChangeLog>

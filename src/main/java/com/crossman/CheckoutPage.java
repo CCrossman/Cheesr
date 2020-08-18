@@ -59,7 +59,7 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 					final Order order = new Order(getCheesrSession().getUsername(), address, cart.getCheeses(), priceSold);
 					final String json = WicketApplication.getInjector().getInstance(Gson.class).toJson(order);
 					try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
-						c.createQuery("INSERT INTO orders (json, created, updated) VALUES (:order, now(), now())")
+						c.createQuery("INSERT INTO orders (json, created) VALUES (:order, now())")
 								.addParameter("order", json)
 								.executeUpdate();
 					}
