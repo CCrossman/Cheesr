@@ -1,4 +1,4 @@
-<html>
+<html xmlns:wicket="http://www.w3.org/1999/xhtml">
 <head>
     <title>Cheesr - Checkout</title>
     <wicket:link>
@@ -15,16 +15,27 @@
                 <h3>Checkout</h3>
                 <p>Please verify your billing address:</p>
                 <table>
-                    <tr><th>Name</th>   <td><span wicket:id="name"  /></td></tr>
-                    <tr><th>Street</th> <td><span wicket:id="street"/></td></tr>
-                    <tr><th>City</th>   <td><span wicket:id="city"  /></td></tr>
-                    <tr><th>State</th>  <td><span wicket:id="state" /></td></tr>
-                    <tr><th>Zip</th>    <td><span wicket:id="zip"   /></td></tr>
+                    <tr wicket:id="addressList">
+                        <th wicket:id="kind"></th>
+                        <td>
+                            <table>
+                                <tr><th>Name</th>   <td><span wicket:id="name"></span></td></tr>
+                                <tr><th>Street</th> <td><span wicket:id="street"></span></td></tr>
+                                <tr><th>City</th>   <td><span wicket:id="city"></span></td></tr>
+                                <tr><th>State</th>  <td><span wicket:id="state"></span></td></tr>
+                                <tr><th>Zip</th>    <td><span wicket:id="zip"></span></td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Selection</th>
+                        <td><span wicket:id="radio"></span></td>
+                    </tr>
                     <tr>
                         <th>&nbsp;</th>
                         <td>
                             <input type="button" wicket:id="cancel" value="Cancel" />
-                            <input type="submit" wicket:id="order" value="Order" />
+                            <input type="submit" value="Order" />
                         </td>
                     </tr>
                 </table>

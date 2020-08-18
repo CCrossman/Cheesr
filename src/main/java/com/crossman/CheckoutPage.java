@@ -3,46 +3,53 @@ package com.crossman;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.PropertyModel;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
+	// accessed only by PropertyModel for radio buttons
+	private String selected = "HOME";
 
 	public CheckoutPage(PageParameters pageParameters) {
 		super(pageParameters);
 
 		add(new FeedbackPanel("feedback"));
 
-		Form form = new Form("form");
 		try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
-			final Address address = c.createQuery("SELECT name, street, city, state, zip from addresses where username = :usr and kind = 'HOME'")
+			final List<Address> addresses = c.createQuery("SELECT kind, name, street, city, state, zip from addresses where username = :usr")
 					.addParameter("usr", getCheesrSession().getUsername())
-					.executeAndFetchFirst(AddressResultSetHandler.instance);
-			if (address == null || address.isNil()) {
+					.executeAndFetch(AddressResultSetHandler.instance);
+			if (addresses == null || addresses.isEmpty()) {
 				setResponsePage(ProfilePage.class);
 				return;
 			}
 
-			form.add(new Label("name", address.getName()));
-			form.add(new Label("street", address.getStreet()));
-			form.add(new Label("city", address.getCity()));
-			form.add(new Label("state", address.getState()));
-			form.add(new Label("zip", address.getZip()));
-
-			form.add(new Link("cancel") {
+			ListView listView = new ListView("addressList", addresses) {
 				@Override
-				public void onClick() {
-					setResponsePage(HomePage.class);
+				protected void populateItem(ListItem item) {
+					Address address = (Address) item.getModelObject();
+					item.add(new Label("kind", address.getKind().name()));
+					item.add(new Label("name", address.getName()));
+					item.add(new Label("street", address.getStreet()));
+					item.add(new Label("city", address.getCity()));
+					item.add(new Label("state", address.getState()));
+					item.add(new Label("zip", address.getZip()));
 				}
-			});
+			};
 
-			form.add(new Link("order") {
+			Form form = new Form("form") {
 				@Override
-				public void onClick() {
+				protected void onSubmit() {
 					final Cart cart = getCart();
 					final int cheesesSold = cart.getCheeses().size();
 					final BigDecimal priceSold = cart.getTotal();
@@ -51,7 +58,7 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 					System.err.println("charging customer '" + getCheesrSession().getUsername() + "'");
 
 					// TODO: ship cheeses
-					System.err.println("shipping cheeses to " + address);
+					System.err.println("shipping cheeses to " + addresses.stream().filter(addr -> addr.getKind().name().equals(selected)).findFirst());
 
 					// clean out shopping cart
 					cart.getCheeses().clear();
@@ -61,11 +68,21 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 					pp.add("message", "Sold " + cheesesSold + " cheeses for $" + priceSold);
 					setResponsePage(HomePage.class, pp);
 				}
+			};
+			form.add(listView);
+
+			RadioChoice radioChoice = new RadioChoice("radio", new PropertyModel(this, "selected"), addresses.stream().map(addr -> addr.getKind().name()).collect(Collectors.toList()));
+			form.add(radioChoice);
+
+			form.add(new Link("cancel") {
+				@Override
+				public void onClick() {
+					setResponsePage(HomePage.class);
+				}
 			});
+			add(form);
 		}
-		add(form);
 
 		add(new ShoppingCartPanel("shoppingcart", getCart()));
 	}
-
 }
