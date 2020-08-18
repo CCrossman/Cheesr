@@ -80,4 +80,21 @@
                              constraintName="addresses_username_kind_uniq"
         />
     </changeSet>
+
+    <changeSet id="2020-08-18-001" author="Chris">
+        <createTable tableName="orders">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="orders_pkey" />
+            </column>
+            <column name="json" type="json">
+                <constraints nullable="false" />
+            </column>
+            <column name="created" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

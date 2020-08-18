@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.google.gson.Gson;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -53,13 +54,15 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 					final Cart cart = getCart();
 					final int cheesesSold = cart.getCheeses().size();
 					final BigDecimal priceSold = cart.getTotal();
+					final Address address = addresses.stream().filter(addr -> addr.getKind().name().equals(selected)).findFirst().orElse(null);
 
-					// TODO: charge customer
-					System.err.println("charging customer '" + getCheesrSession().getUsername() + "'");
-
-					// TODO: ship cheeses
-					System.err.println("shipping cheeses to " + addresses.stream().filter(addr -> addr.getKind().name().equals(selected)).findFirst());
-
+					final Order order = new Order(getCheesrSession().getUsername(), address, cart.getCheeses(), priceSold);
+					final String json = WicketApplication.getInjector().getInstance(Gson.class).toJson(order);
+					try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
+						c.createQuery("INSERT INTO orders (json, created, updated) VALUES (:order, now(), now())")
+								.addParameter("order", json)
+								.executeUpdate();
+					}
 					// clean out shopping cart
 					cart.getCheeses().clear();
 
