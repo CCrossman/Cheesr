@@ -48,6 +48,8 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 				}
 			};
 			add(listView);
+
+			add(new PageNavigatorPanel("pageNavigator"));
 		}
 	}
 

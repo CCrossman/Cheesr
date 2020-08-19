@@ -87,5 +87,6 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 		}
 
 		add(new ShoppingCartPanel("shoppingcart", getCart()));
+		add(new PageNavigatorPanel("pageNavigator"));
 	}
 }

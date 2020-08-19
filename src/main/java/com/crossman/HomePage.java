@@ -47,5 +47,6 @@ public class HomePage extends CheesrPage implements IRequireAuthorization {
 				return !getCart().getCheeses().isEmpty();
 			}
 		});
+		add(new PageNavigatorPanel("pageNavigator"));
 	}
 }

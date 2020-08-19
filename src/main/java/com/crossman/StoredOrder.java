@@ -2,11 +2,12 @@ package com.crossman;
 
 import lombok.Value;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Value
-public class StoredOrder {
+public class StoredOrder implements Serializable {
 	long id;
 	String username;
 	Address address;

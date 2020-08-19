@@ -79,5 +79,7 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 				setResponsePage(HomePage.class);
 			}
 		});
+
+		add(new PageNavigatorPanel("pageNavigator"));
 	}
 }
