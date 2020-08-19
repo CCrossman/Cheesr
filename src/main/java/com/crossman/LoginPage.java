@@ -53,5 +53,7 @@ public class LoginPage extends CheesrPage {
 		form.add(usr);
 		form.add(pwd);
 		add(form);
+
+		add(new PageNavigatorPanel("pageNavigator"));
 	}
 }

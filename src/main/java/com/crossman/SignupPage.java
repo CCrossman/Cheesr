@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -12,6 +13,8 @@ import org.sql2o.Sql2o;
 public class SignupPage extends WebPage {
 
 	public SignupPage() {
+		add(new FeedbackPanel("feedback"));
+
 		final TextField usr = new TextField("usr", new Model());
 		final TextField pwd = new PasswordTextField("pwd", new Model());
 
@@ -54,5 +57,7 @@ public class SignupPage extends WebPage {
 		form.add(usr);
 		form.add(pwd);
 		add(form);
+
+		add(new PageNavigatorPanel("pageNavigator"));
 	}
 }

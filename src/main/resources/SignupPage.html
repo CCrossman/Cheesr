@@ -1,18 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:wicket="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Signup Page</title>
+    <title>Cheesr - Signup</title>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </wicket:link>
 </head>
 <body>
-
-<form wicket:id="form" action="#" method="post">
-    <div class="container">
-        <label><b>Username: </b><input wicket:id="usr" type="text" placeholder="Enter Username" name="uname" required></label>
-        <label><b>Password: </b><input wicket:id="pwd" type="password" placeholder="Enter Password" name="psw" required></label>
-        <button type="submit">Signup</button>
+<div id="container">
+    <div id="header"><h1>Cheesr</h1></div>
+    <div wicket:id="pageNavigator"></div>
+    <div id="content">
+        <div id="main">
+            <div wicket:id="feedback" class="feedback"></div>
+            <form wicket:id="form" action="#" method="post">
+                <div class="container">
+                    <label><b>Username: </b><input wicket:id="usr" type="text" placeholder="Enter Username" name="uname" required></label><br>
+                    <label><b>Password: </b><input wicket:id="pwd" type="password" placeholder="Enter Password" name="psw" required></label><br>
+                    <button type="submit">Signup</button>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
-
+</div>
 </body>
 </html>

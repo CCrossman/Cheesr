@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:wicket="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
+    <title>Cheesr - Login</title>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </wicket:link>
 </head>
 <body>
+<div id="container">
+    <div id="header"></div>
+    <div wicket:id="pageNavigator"></div>
+    <div id="content">
+        <div id="main">
+            <div wicket:id="feedback" class="feedback"></div>
 
-<div wicket:id="feedback" class="feedback"></div>
+            <span>Don't have an account? <wicket:link><a href="SignupPage.html">Create one.</a></wicket:link></span><br/>
 
-<span>Don't have an account? <wicket:link><a href="SignupPage.html">Create one.</a></wicket:link></span><br/>
-
-<form wicket:id="form" action="#" method="post">
-    <div class="container">
-        <label><b>Username: </b><input wicket:id="usr" type="text" placeholder="Enter Username" name="uname" required></label>
-        <label><b>Password: </b><input wicket:id="pwd" type="password" placeholder="Enter Password" name="psw" required></label>
-        <button type="submit">Login</button>
+            <form wicket:id="form" action="#" method="post">
+                <div class="container">
+                    <label><b>Username: </b><input wicket:id="usr" type="text" placeholder="Enter Username" name="uname" required></label><br>
+                    <label><b>Password: </b><input wicket:id="pwd" type="password" placeholder="Enter Password" name="psw" required></label><br>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
-
+</div>
 </body>
 </html>
