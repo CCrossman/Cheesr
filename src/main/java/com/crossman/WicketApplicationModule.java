@@ -1,10 +1,12 @@
 package com.crossman;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import org.sql2o.Sql2o;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 public final class WicketApplicationModule extends AbstractModule {
@@ -35,5 +37,9 @@ public final class WicketApplicationModule extends AbstractModule {
 
 		// initialize the encryptor
 		bind(Encryptor.class).toInstance(new DefaultEncryptor(properties.getProperty("ENC_SECRET"), properties.getProperty("ENC_SALT")));
+
+		// bind the showers
+		bind(new Key<Show<Address>>() {}).toInstance(DefaultAddressShower.instance);
+		bind(new Key<Show<List<Cheese>>>() {}).toInstance(DefaultCheeseListShower.instance);
 	}
 }

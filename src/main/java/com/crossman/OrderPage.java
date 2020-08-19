@@ -1,6 +1,7 @@
 package com.crossman;
 
 import com.google.gson.Gson;
+import com.google.inject.Key;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -13,9 +14,9 @@ import org.sql2o.Sql2o;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderPage extends CheesrPage implements IRequireAuthorization {
+
 	public OrderPage(PageParameters pageParameters) {
 		super(pageParameters);
 
@@ -37,12 +38,15 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 					});
 
 			ListView listView = new ListView("orders", storedOrders) {
+				private final Show<Address> addressShow = WicketApplication.getInjector().getInstance(new Key<Show<Address>>() {});
+				private final Show<List<Cheese>> cheeseListShow = WicketApplication.getInjector().getInstance(new Key<Show<List<Cheese>>>() {});
+
 				@Override
 				protected void populateItem(ListItem item) {
 					StoredOrder so = (StoredOrder)item.getModelObject();
 					item.add(new Label("id", String.valueOf(so.getId())));
-					item.add(new Label("address", print(so.getAddress())));
-					item.add(new Label("cheeses", so.getCheeses().stream().map(Cheese::getName).collect(Collectors.joining(", "))));
+					item.add(new Label("address", addressShow.show(so.getAddress())));
+					item.add(new Label("cheeses", cheeseListShow.show(so.getCheeses())));
 					item.add(new Label("price", String.valueOf(so.getPrice())));
 					item.add(new Label("shipped", String.valueOf(so.isShipped())));
 				}
@@ -51,9 +55,5 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 
 			add(new PageNavigatorPanel("pageNavigator"));
 		}
-	}
-
-	private static String print(Address address) {
-		return address.getStreet() + ", " + address.getCity() + ", " + address.getState() + ", " + address.getZip();
 	}
 }
