@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Orders</title>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </wicket:link>
+</head>
+<body>
+<div id="container">
+    <div id="header"></div>
+    <div id="content">
+        <div id="main">
+            <div wicket:id="feedback" class="feedback"></div>
+            <table>
+                <tr>
+                    <th>Order No.</th>
+                    <th>Cheeses</th>
+                    <th>Address</th>
+                    <th>Price</th>
+                    <th>Shipped</th>
+                </tr>
+                <tr wicket:id="orders">
+                    <td wicket:id="id"></td>
+                    <td wicket:id="cheeses"></td>
+                    <td wicket:id="address"></td>
+                    <td wicket:id="price"></td>
+                    <td wicket:id="shipped"></td>
+                </tr>
+            </table>
+        </div>
+        <div id="cart"></div>
+    </div>
+</div>
+</body>
+</html>

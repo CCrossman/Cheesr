@@ -101,4 +101,12 @@
     <changeSet id="2020-08-18-002" author="Chris">
         <dropColumn tableName="orders" columnName="updated" />
     </changeSet>
+
+    <changeSet id="2020-08-18-003" author="Chris">
+        <addColumn tableName="orders">
+            <column name="shipped" type="bool" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
