@@ -1,0 +1,15 @@
+package com.crossman.v2;
+
+import com.crossman.v1.Address;
+import lombok.Value;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Value
+public class Order {
+	String username;
+	Address address;
+	List<CheesrProduct> products;
+	BigDecimal price;
+}
