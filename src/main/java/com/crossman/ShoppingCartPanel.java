@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.crossman.v1.Cheese;
 import lombok.Getter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;

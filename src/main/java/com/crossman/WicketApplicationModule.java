@@ -1,5 +1,9 @@
 package com.crossman;
 
+import com.crossman.v1.Address;
+import com.crossman.v1.Cheese;
+import com.crossman.v1.DefaultAddressShower;
+import com.crossman.v1.DefaultCheeseListShower;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import org.sql2o.Sql2o;

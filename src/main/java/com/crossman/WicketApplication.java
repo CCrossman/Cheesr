@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.crossman.v1.Cheese;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.Getter;

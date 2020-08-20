@@ -1,4 +1,4 @@
-package com.crossman;
+package com.crossman.v1;
 
 import lombok.Value;
 

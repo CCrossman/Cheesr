@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.crossman.v1.Cheese;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;

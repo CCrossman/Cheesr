@@ -1,4 +1,6 @@
-package com.crossman;
+package com.crossman.v1;
+
+import com.crossman.Show;
 
 import java.util.List;
 import java.util.stream.Collectors;

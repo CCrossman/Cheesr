@@ -1,4 +1,6 @@
-package com.crossman;
+package com.crossman.v1;
+
+import com.crossman.Show;
 
 public enum DefaultAddressShower implements Show<Address> {
 	instance;

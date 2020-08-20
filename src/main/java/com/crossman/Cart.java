@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.crossman.v1.Cheese;
 import lombok.Getter;
 import lombok.Setter;
 

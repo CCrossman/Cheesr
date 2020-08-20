@@ -1,4 +1,4 @@
-package com.crossman;
+package com.crossman.v1;
 
 import lombok.Value;
 
@@ -12,10 +12,6 @@ public class Address implements Serializable {
 	String city;
 	String state;
 	String zip;
-
-	public boolean isNil() {
-		return kind == null && name == null && street == null && city == null && state == null && zip == null;
-	}
 
 	public static enum Type {
 		HOME, WORK
