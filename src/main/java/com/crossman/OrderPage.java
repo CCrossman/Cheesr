@@ -6,6 +6,8 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.sql2o.Connection;
 import org.sql2o.ResultSetHandler;
@@ -37,7 +39,7 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 						}
 					});
 
-			ListView listView = new ListView("orders", storedOrders) {
+			PageableListView listView = new PageableListView("orders", storedOrders, 5) {
 				private final Show<Address> addressShow = WicketApplication.getInjector().getInstance(new Key<Show<Address>>() {});
 				private final Show<List<Cheese>> cheeseListShow = WicketApplication.getInjector().getInstance(new Key<Show<List<Cheese>>>() {});
 
@@ -52,6 +54,7 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 				}
 			};
 			add(listView);
+			add(new PagingNavigator("navigator", listView));
 
 			add(new PageNavigatorPanel("pageNavigator"));
 		}
