@@ -15,21 +15,21 @@ import java.util.Base64;
 public final class DefaultEncryptor implements Encryptor {
 
 	private final String secretKey, salt;
+	private Cipher cipher;
 
 	public DefaultEncryptor(String secretKey, String salt) {
 		this.secretKey = secretKey;
 		this.salt = salt;
 	}
 
-	@Override
-	public String encrypt(String str) {
-		if (secretKey == null) {
-			throw new RuntimeException("cannot have a null secret");
-		}
-		if (salt == null) {
-			throw new RuntimeException("cannot have null salt");
-		}
+	public void init() {
 		try {
+			if (secretKey == null) {
+				throw new NullPointerException("cannot have a null secret");
+			}
+			if (salt == null) {
+				throw new NullPointerException("cannot have null salt");
+			}
 			byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 			IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
@@ -38,10 +38,18 @@ public final class DefaultEncryptor implements Encryptor {
 			SecretKey tmp = factory.generateSecret(spec);
 			SecretKeySpec secretKeySpec = new SecretKeySpec(tmp.getEncoded(), "AES");
 
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+		} catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | InvalidKeySpecException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public String encrypt(String str) {
+		try {
 			return Base64.getEncoder().encodeToString(cipher.doFinal(str.getBytes(StandardCharsets.UTF_8)));
-		} catch (InvalidKeySpecException | NoSuchAlgorithmException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException e) {
+		} catch (BadPaddingException | IllegalBlockSizeException e) {
 			throw new RuntimeException(e);
 		}
 	}

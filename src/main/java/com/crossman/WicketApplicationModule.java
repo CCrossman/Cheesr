@@ -36,7 +36,9 @@ public final class WicketApplicationModule extends AbstractModule {
 		bind(Sql2o.class).toInstance(sql2o);
 
 		// initialize the encryptor
-		bind(Encryptor.class).toInstance(new DefaultEncryptor(properties.getProperty("ENC_SECRET"), properties.getProperty("ENC_SALT")));
+		final DefaultEncryptor de = new DefaultEncryptor(properties.getProperty("ENC_SECRET"), properties.getProperty("ENC_SALT"));
+		de.init();
+		bind(Encryptor.class).toInstance(de);
 
 		// bind the showers
 		bind(new Key<Show<Address>>() {}).toInstance(DefaultAddressShower.instance);
