@@ -1,6 +1,6 @@
 package com.crossman;
 
-import com.crossman.v1.Cheese;
+import com.crossman.v2.CheesrProduct;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +12,13 @@ import java.util.List;
 public final class Cart implements Serializable {
 	@Getter
 	@Setter
-	private List<Cheese> cheeses = new ArrayList<>();
+	private List<CheesrProduct> products = new ArrayList<>();
 
 	public BigDecimal getTotal() {
 		BigDecimal total = BigDecimal.ZERO;
-		if (cheeses != null) {
-			for (Cheese cheese : cheeses) {
-				total = total.add(cheese.getPrice());
+		if (products != null) {
+			for (CheesrProduct product : products) {
+				total = total.add(product.getPrice());
 			}
 		}
 		return total;

@@ -2,7 +2,7 @@ package com.crossman;
 
 import com.crossman.v1.Address;
 import com.crossman.v1.AddressResultSetHandler;
-import com.crossman.v1.Order;
+import com.crossman.v2.Order;
 import com.google.gson.Gson;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
@@ -55,11 +55,11 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 				@Override
 				protected void onSubmit() {
 					final Cart cart = getCart();
-					final int cheesesSold = cart.getCheeses().size();
+					final int productSold = cart.getProducts().size();
 					final BigDecimal priceSold = cart.getTotal();
 					final Address address = addresses.stream().filter(addr -> addr.getKind().name().equals(selected)).findFirst().orElse(null);
 
-					final Order order = new Order(getCheesrSession().getUsername(), address, cart.getCheeses(), priceSold);
+					final Order order = new Order(Order.Version.v2, getCheesrSession().getUsername(), address, cart.getProducts(), priceSold);
 					final String json = WicketApplication.getInjector().getInstance(Gson.class).toJson(order);
 					try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
 						c.createQuery("INSERT INTO orders (json, created) VALUES (:order, now())")
@@ -67,11 +67,11 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 								.executeUpdate();
 					}
 					// clean out shopping cart
-					cart.getCheeses().clear();
+					cart.getProducts().clear();
 
 					// return to front page
 					PageParameters pp = new PageParameters();
-					pp.add("message", "Sold " + cheesesSold + " cheeses for $" + priceSold);
+					pp.add("message", "Sold " + productSold + " cheeses for $" + priceSold);
 					setResponsePage(HomePage.class, pp);
 				}
 			};

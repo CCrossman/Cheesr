@@ -1,6 +1,7 @@
 package com.crossman;
 
 import com.crossman.v1.Cheese;
+import com.crossman.v2.CheesrProduct;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.Getter;
@@ -15,9 +16,12 @@ import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
 import org.sql2o.Connection;
+import org.sql2o.ResultSetHandler;
 import org.sql2o.Sql2o;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @NoArgsConstructor
@@ -65,10 +69,15 @@ public class WicketApplication extends WebApplication {
 		return new CheesrSession(request);
 	}
 
-	public List<Cheese> getCheeses() {
+	public List<CheesrProduct> getProducts() {
 		try (Connection connection = sql2o.open()) {
 			return connection.createQuery("SELECT name, price from cheeses")
-					.executeAndFetch(Cheese.class);
+					.executeAndFetch(new ResultSetHandler<CheesrProduct>() {
+						@Override
+						public CheesrProduct handle(ResultSet resultSet) throws SQLException {
+							return new CheesrProduct(CheesrProduct.Type.CHEESE, resultSet.getString("name"), resultSet.getBigDecimal("price"));
+						}
+					});
 		}
 	}
 }

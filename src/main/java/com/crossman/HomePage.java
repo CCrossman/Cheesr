@@ -1,6 +1,6 @@
 package com.crossman;
 
-import com.crossman.v1.Cheese;
+import com.crossman.v2.CheesrProduct;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -19,17 +19,18 @@ public class HomePage extends CheesrPage implements IRequireAuthorization {
 
 		add(new FeedbackPanel("feedback"));
 
-		PageableListView cheeses = new PageableListView("cheeses", getCheeses(), 5) {
+		PageableListView cheeses = new PageableListView("products", getProducts(), 5) {
 			@Override
 			protected void populateItem(ListItem item) {
-				Cheese cheese = (Cheese)item.getModelObject();
-				item.add(new Label("name", cheese.getName()));
-				item.add(new Label("price", "$" + cheese.getPrice()));
+				CheesrProduct product = (CheesrProduct)item.getModelObject();
+				item.add(new Label("name", product.getName()));
+				item.add(new Label("type", product.getType().name()));
+				item.add(new Label("price", "$" + product.getPrice()));
 				item.add(new Link("add", item.getModel()) {
 					@Override
 					public void onClick() {
-						Cheese selected = (Cheese)getModelObject();
-						getCart().getCheeses().add(selected);
+						CheesrProduct selected = (CheesrProduct)getModelObject();
+						getCart().getProducts().add(selected);
 					}
 				});
 			}
@@ -45,7 +46,7 @@ public class HomePage extends CheesrPage implements IRequireAuthorization {
 
 			@Override
 			public boolean isVisible() {
-				return !getCart().getCheeses().isEmpty();
+				return !getCart().getProducts().isEmpty();
 			}
 		});
 		add(new PageNavigatorPanel("pageNavigator"));

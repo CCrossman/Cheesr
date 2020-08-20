@@ -8,8 +8,13 @@ import java.util.List;
 
 @Value
 public class Order {
+	Version version;
 	String username;
 	Address address;
 	List<CheesrProduct> products;
 	BigDecimal price;
+
+	public static enum Version {
+		v2
+	}
 }

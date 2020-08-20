@@ -1,6 +1,6 @@
 package com.crossman;
 
-import com.crossman.v1.Cheese;
+import com.crossman.v2.CheesrProduct;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 
@@ -24,7 +24,7 @@ public abstract class CheesrPage extends WebPage {
 		return getCheesrSession().getCart();
 	}
 
-	public List<Cheese> getCheeses() {
-		return WicketApplication.get().getCheeses();
+	public List<CheesrProduct> getProducts() {
+		return WicketApplication.get().getProducts();
 	}
 }

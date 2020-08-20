@@ -4,6 +4,8 @@ import com.crossman.v1.Address;
 import com.crossman.v1.Cheese;
 import com.crossman.v1.DefaultAddressShower;
 import com.crossman.v1.DefaultCheeseListShower;
+import com.crossman.v2.CheesrProduct;
+import com.crossman.v2.DefaultCheesrProductListShower;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import org.sql2o.Sql2o;
@@ -47,5 +49,6 @@ public final class WicketApplicationModule extends AbstractModule {
 		// bind the showers
 		bind(new Key<Show<Address>>() {}).toInstance(DefaultAddressShower.instance);
 		bind(new Key<Show<List<Cheese>>>() {}).toInstance(DefaultCheeseListShower.instance);
+		bind(new Key<Show<List<CheesrProduct>>>() {}).toInstance(DefaultCheesrProductListShower.instance);
 	}
 }
