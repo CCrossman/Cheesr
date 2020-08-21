@@ -113,4 +113,13 @@
     <changeSet id="2020-08-20-001" author="Chris">
         <customChange class="com.crossman.liquibase.OrderV1toV2" />
     </changeSet>
+
+    <changeSet id="2020-08-20-002" author="Chris">
+        <renameTable oldTableName="cheeses" newTableName="products" />
+        <addColumn tableName="products">
+            <column name="type" type="text" defaultValue="CHEESE">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

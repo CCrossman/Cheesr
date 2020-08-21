@@ -87,11 +87,11 @@ public class WicketApplication extends WebApplication {
 
 	public List<CheesrProduct> getProducts() {
 		try (Connection connection = sql2o.open()) {
-			return connection.createQuery("SELECT name, price from cheeses")
+			return connection.createQuery("SELECT name, type, price from products")
 					.executeAndFetch(new ResultSetHandler<CheesrProduct>() {
 						@Override
 						public CheesrProduct handle(ResultSet resultSet) throws SQLException {
-							return new CheesrProduct(CheesrProduct.Type.CHEESE, resultSet.getString("name"), resultSet.getBigDecimal("price"));
+							return new CheesrProduct(CheesrProduct.Type.valueOf(resultSet.getString("type")), resultSet.getString("name"), resultSet.getBigDecimal("price"));
 						}
 					});
 		}
