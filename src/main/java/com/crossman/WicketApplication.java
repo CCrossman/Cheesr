@@ -25,10 +25,13 @@ import org.sql2o.Connection;
 import org.sql2o.ResultSetHandler;
 import org.sql2o.Sql2o;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class WicketApplication extends WebApplication {
@@ -88,12 +91,21 @@ public class WicketApplication extends WebApplication {
 	public List<CheesrProduct> getProducts() {
 		try (Connection connection = sql2o.open()) {
 			return connection.createQuery("SELECT name, type, price from products")
-					.executeAndFetch(new ResultSetHandler<CheesrProduct>() {
+					.executeAndFetch(new ResultSetHandler<Optional<CheesrProduct>>() {
 						@Override
-						public CheesrProduct handle(ResultSet resultSet) throws SQLException {
-							return new CheesrProduct(CheesrProduct.Type.valueOf(resultSet.getString("type")), resultSet.getString("name"), resultSet.getBigDecimal("price"));
+						public Optional<CheesrProduct> handle(ResultSet resultSet) throws SQLException {
+							try {
+								final CheesrProduct.Type type = CheesrProduct.Type.valueOf(resultSet.getString("type"));
+								final String name = resultSet.getString("name");
+								final BigDecimal price = resultSet.getBigDecimal("price");
+								return Optional.of(new CheesrProduct(type, name, price));
+							} catch (Exception e) {
+								e.printStackTrace();
+								return Optional.empty();
+							}
 						}
-					});
+					})
+					.stream().filter(o -> o.isPresent()).map(o -> o.get()).collect(Collectors.toList());
 		}
 	}
 }
