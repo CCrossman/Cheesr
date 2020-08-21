@@ -8,6 +8,8 @@ import com.crossman.v2.CheesrProduct;
 import com.crossman.v2.DefaultCheesrProductListShower;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Sql2o;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 public final class WicketApplicationModule extends AbstractModule {
+	private static final Logger logger = LoggerFactory.getLogger(WicketApplicationModule.class);
 
 	@Override
 	protected void configure() {
@@ -26,6 +29,7 @@ public final class WicketApplicationModule extends AbstractModule {
 		try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties")) {
 			properties.load(is);
 		} catch (IOException e) {
+			logger.error("Problem loading application.properties file", e);
 			throw new RuntimeException(e);
 		}
 		bind(Properties.class).toInstance(properties);
@@ -34,6 +38,7 @@ public final class WicketApplicationModule extends AbstractModule {
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
+			logger.error("Problem loading org.postgresql.Driver", e);
 			throw new RuntimeException(e);
 		}
 

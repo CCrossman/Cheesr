@@ -21,6 +21,8 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 import org.sql2o.ResultSetHandler;
 import org.sql2o.Sql2o;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class WicketApplication extends WebApplication {
+	private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
+
 	@Getter
 	private static final Injector injector = Guice.createInjector(new WicketApplicationModule());
 
@@ -56,7 +60,7 @@ public class WicketApplication extends WebApplication {
 			Liquibase liquibase = new Liquibase("dbchangelog.xml", new ClassLoaderResourceAccessor(), database);
 			liquibase.update(new Contexts());
 		} catch (LiquibaseException e) {
-			e.printStackTrace();
+			logger.error("Problem running Liquibase changelog.", e);
 			System.exit(1);
 		}
 
@@ -100,7 +104,7 @@ public class WicketApplication extends WebApplication {
 								final BigDecimal price = resultSet.getBigDecimal("price");
 								return Optional.of(new CheesrProduct(type, name, price));
 							} catch (Exception e) {
-								e.printStackTrace();
+								logger.warn("Problem loading a product.", e);
 								return Optional.empty();
 							}
 						}
