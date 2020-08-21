@@ -2,6 +2,7 @@ package com.crossman;
 
 import com.crossman.v1.Address;
 import com.crossman.v2.CheesrProduct;
+import com.crossman.v2.Order;
 import com.crossman.v2.StoredOrder;
 import com.google.gson.Gson;
 import com.google.inject.Key;
@@ -30,22 +31,15 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 		final Gson gson = WicketApplication.getInjector().getInstance(Gson.class);
 		final Sql2o sql2o = WicketApplication.getInjector().getInstance(Sql2o.class);
 		try (Connection c = sql2o.open()) {
-			final List<StoredOrder> storedOrders = c.createQuery("SELECT id, json, shipped FROM orders WHERE json ->> 'username' = :usr")
+			final List<StoredOrder> storedOrders = c.createQuery("SELECT id, json, shipped FROM orders WHERE json ->> 'username' = :usr ORDER BY id")
 					.addParameter("usr", getCheesrSession().getUsername())
 					.executeAndFetch(new ResultSetHandler<StoredOrder>() {
 						@Override
 						public StoredOrder handle(ResultSet resultSet) throws SQLException {
 							long id = resultSet.getLong("id");
-							try {
-								com.crossman.v1.Order order = gson.fromJson(resultSet.getString("json"), com.crossman.v1.Order.class);
-								boolean shipped = resultSet.getBoolean("shipped");
-								final List<CheesrProduct> products = order.getCheeses().stream().map(c -> new CheesrProduct(CheesrProduct.Type.CHEESE, c.getName(), c.getPrice())).collect(Collectors.toList());
-								return new StoredOrder(id, order.getUsername(), order.getAddress(), products, order.getPrice(), shipped);
-							} catch (Exception ex) {
-								com.crossman.v2.Order order = gson.fromJson(resultSet.getString("json"), com.crossman.v2.Order.class);
-								boolean shipped = resultSet.getBoolean("shipped");
-								return new StoredOrder(id, order.getUsername(), order.getAddress(), order.getProducts(), order.getPrice(), shipped);
-							}
+							com.crossman.v2.Order order = gson.fromJson(resultSet.getString("json"), com.crossman.v2.Order.class);
+							boolean shipped = resultSet.getBoolean("shipped");
+							return new StoredOrder(id, order.getVersion(), order.getUsername(), order.getAddress(), order.getProducts(), order.getPrice(), shipped);
 						}
 					});
 

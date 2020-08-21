@@ -1,9 +1,15 @@
 package com.crossman;
 
-import com.crossman.v1.Cheese;
 import com.crossman.v2.CheesrProduct;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import liquibase.Contexts;
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.wicket.Application;
@@ -41,6 +47,16 @@ public class WicketApplication extends WebApplication {
 
 	@Override
 	protected void init() {
+		// run Liquibase
+		try (Connection c = sql2o.open()) {
+			Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(c.getJdbcConnection()));
+			Liquibase liquibase = new Liquibase("dbchangelog.xml", new ClassLoaderResourceAccessor(), database);
+			liquibase.update(new Contexts());
+		} catch (LiquibaseException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 		// retrieve resources from the /resource directory when deployed to Tomcat
 		final IResourceFinder defaultResourceFinder = getResourceFinder();
 		getResourceSettings().setResourceFinder(new IResourceFinder() {

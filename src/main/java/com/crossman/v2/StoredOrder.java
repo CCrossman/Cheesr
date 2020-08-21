@@ -10,6 +10,7 @@ import java.util.List;
 @Value
 public class StoredOrder implements Serializable {
 	long id;
+	Order.Version version;
 	String username;
 	Address address;
 	List<CheesrProduct> products;

@@ -109,4 +109,8 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="2020-08-20-001" author="Chris">
+        <customChange class="com.crossman.liquibase.OrderV1toV2" />
+    </changeSet>
 </databaseChangeLog>
