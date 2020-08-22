@@ -43,19 +43,13 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 				// save address in database
 				final Sql2o sql2o = WicketApplication.getInjector().getInstance(Sql2o.class);
 				try (Connection c = sql2o.open()) {
-					long count = c.createQuery("SELECT count(*) FROM addresses WHERE username = :usr AND kind = :kind")
-							.addParameter("usr", getCheesrSession().getUsername())
-							.addParameter("kind", addressType)
-							.executeScalar(Long.class);
-
 					final String name = tfName.getModelObjectAsString();
 					final String street = tfStreet.getModelObjectAsString();
 					final String city = tfCity.getModelObjectAsString();
 					final String state = tfState.getModelObjectAsString();
 					final String zip = tfZip.getModelObjectAsString();
 
-					if (count == 0) {
-						c.createQuery("INSERT INTO addresses (username, kind, name, street, city, state, zip) VALUES (:usr, :kind, :name, :street, :city, :state, :zip)")
+					c.createQuery("INSERT INTO addresses (username, kind, name, street, city, state, zip) VALUES (:usr, :kind, :name, :street, :city, :state, :zip) ON CONFLICT (username, kind) DO UPDATE SET name = :name, street = :street, city = :city, state = :state, zip = :zip")
 								.addParameter("usr", getCheesrSession().getUsername())
 								.addParameter("name", name)
 								.addParameter("kind", addressType)
@@ -64,17 +58,6 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 								.addParameter("state", state)
 								.addParameter("zip", zip)
 								.executeUpdate();
-					} else {
-						c.createQuery("UPDATE addresses SET name = :name, street = :street, city = :city, state = :state, zip = :zip WHERE username = :usr AND kind = :kind")
-								.addParameter("usr", getCheesrSession().getUsername())
-								.addParameter("name", name)
-								.addParameter("kind", addressType)
-								.addParameter("street", street)
-								.addParameter("city", city)
-								.addParameter("state", state)
-								.addParameter("zip", zip)
-								.executeUpdate();
-					}
 				}
 
 				// return to front page
