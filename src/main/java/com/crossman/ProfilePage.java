@@ -1,11 +1,15 @@
 package com.crossman;
 
 import com.crossman.v1.Address;
+import com.crossman.v1.AddressResultSetHandler;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -14,6 +18,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.Arrays;
+import java.util.List;
 
 public final class ProfilePage extends CheesrPage implements IRequireAuthorization {
 	// used only by PropertyModel for DropDownChoice
@@ -23,6 +28,26 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 		super(pageParameters);
 
 		add(new FeedbackPanel("feedback"));
+
+		try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
+			final List<Address> addresses = c.createQuery("SELECT kind, name, street, city, state, zip from addresses where username = :usr")
+					.addParameter("usr", getCheesrSession().getUsername())
+					.executeAndFetch(AddressResultSetHandler.instance);
+
+			ListView listView = new ListView("addresses", addresses) {
+				@Override
+				protected void populateItem(ListItem item) {
+					Address address = (Address) item.getModelObject();
+					item.add(new Label("kind", address.getKind().name()));
+					item.add(new Label("name", address.getName()));
+					item.add(new Label("street", address.getStreet()));
+					item.add(new Label("city", address.getCity()));
+					item.add(new Label("state", address.getState()));
+					item.add(new Label("zip", address.getZip()));
+				}
+			};
+			add(listView);
+		}
 
 		final TextField tfName = new TextField("name", new Model());
 		final TextField tfStreet = new TextField("street", new Model());
@@ -41,8 +66,7 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 			@Override
 			protected void onSubmit() {
 				// save address in database
-				final Sql2o sql2o = WicketApplication.getInjector().getInstance(Sql2o.class);
-				try (Connection c = sql2o.open()) {
+				try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
 					final String name = tfName.getModelObjectAsString();
 					final String street = tfStreet.getModelObjectAsString();
 					final String city = tfCity.getModelObjectAsString();

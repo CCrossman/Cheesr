@@ -12,6 +12,20 @@
     <div id="content">
         <div id="main">
             <div wicket:id="feedback" class="feedback"></div>
+            <table>
+                <tr wicket:id="addresses">
+                    <th wicket:id="kind"></th>
+                    <td>
+                        <table>
+                            <tr><th>Name</th>   <td><span wicket:id="name"></span></td></tr>
+                            <tr><th>Street</th> <td><span wicket:id="street"></span></td></tr>
+                            <tr><th>City</th>   <td><span wicket:id="city"></span></td></tr>
+                            <tr><th>State</th>  <td><span wicket:id="state"></span></td></tr>
+                            <tr><th>Zip</th>    <td><span wicket:id="zip"></span></td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
             <form wicket:id="form">
                 <h3>Address</h3>
                 <p>Please enter your billing address:</p>
