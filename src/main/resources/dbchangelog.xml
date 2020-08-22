@@ -122,4 +122,22 @@
             </column>
         </addColumn>
     </changeSet>
+    
+    <changeSet id="2020-08-22-001" author="Chris">
+        <createTable tableName="permissions">
+            <column name="user_id" type="INT">
+                <constraints nullable="false" />
+            </column>
+            <column name="active" type="bool" defaultValue="true">
+                <constraints nullable="false" />
+            </column>
+            <column name="admin" type="bool" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2020-08-22-002" author="Chris">
+        <customChange class="com.crossman.liquibase.AddExistingUsersToPermissions" />
+    </changeSet>
 </databaseChangeLog>
