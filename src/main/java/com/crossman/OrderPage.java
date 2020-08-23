@@ -19,7 +19,6 @@ import org.sql2o.Sql2o;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderPage extends CheesrPage implements IRequireAuthorization {
 
@@ -32,7 +31,7 @@ public class OrderPage extends CheesrPage implements IRequireAuthorization {
 		final Sql2o sql2o = WicketApplication.getInjector().getInstance(Sql2o.class);
 		try (Connection c = sql2o.open()) {
 			final List<StoredOrder> storedOrders = c.createQuery("SELECT id, json, shipped FROM orders WHERE json ->> 'username' = :usr ORDER BY id")
-					.addParameter("usr", getCheesrSession().getUsername())
+					.addParameter("usr", getCheesrSession().getUser().getName())
 					.executeAndFetch(new ResultSetHandler<StoredOrder>() {
 						@Override
 						public StoredOrder handle(ResultSet resultSet) throws SQLException {

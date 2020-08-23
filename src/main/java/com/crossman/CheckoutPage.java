@@ -31,7 +31,7 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 
 		try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
 			final List<Address> addresses = c.createQuery("SELECT kind, name, street, city, state, zip from addresses where username = :usr")
-					.addParameter("usr", getCheesrSession().getUsername())
+					.addParameter("usr", getCheesrSession().getUser().getName())
 					.executeAndFetch(AddressResultSetHandler.instance);
 			if (addresses == null || addresses.isEmpty()) {
 				setResponsePage(ProfilePage.class);
@@ -59,7 +59,7 @@ public class CheckoutPage extends CheesrPage implements IRequireAuthorization {
 					final BigDecimal priceSold = cart.getTotal();
 					final Address address = addresses.stream().filter(addr -> addr.getKind().name().equals(selected)).findFirst().orElse(null);
 
-					final Order order = new Order(Order.Version.v2, getCheesrSession().getUsername(), address, cart.getProducts(), priceSold);
+					final Order order = new Order(Order.Version.v2, getCheesrSession().getUser().getName(), address, cart.getProducts(), priceSold);
 					final String json = WicketApplication.getInjector().getInstance(Gson.class).toJson(order);
 					try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
 						c.createQuery("INSERT INTO orders (json, created) VALUES (:order, now())")

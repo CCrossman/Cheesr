@@ -1,6 +1,7 @@
 package com.crossman;
 
 import com.crossman.v2.CheesrProduct;
+import com.crossman.v2.StoredUser;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import liquibase.Contexts;
@@ -16,6 +17,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.CompoundAuthorizationStrategy;
 import org.apache.wicket.authorization.strategies.page.SimplePageAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.file.IResourceFinder;
@@ -79,12 +81,22 @@ public class WicketApplication extends WebApplication {
 		});
 
 		// this is how we authorize
-		getSecuritySettings().setAuthorizationStrategy(new SimplePageAuthorizationStrategy(IRequireAuthorization.class, LoginPage.class) {
+		final CompoundAuthorizationStrategy strategy = new CompoundAuthorizationStrategy();
+		strategy.add(new SimplePageAuthorizationStrategy(IRequireAuthorization.class, LoginPage.class) {
 			@Override
 			protected boolean isAuthorized() {
-				return ((CheesrSession)Session.get()).getUsername() != null;
+				final StoredUser storedUser = ((CheesrSession) Session.get()).getUser();
+				return storedUser != null && storedUser.isActive();
 			}
 		});
+		strategy.add(new SimplePageAuthorizationStrategy(IRequireAdminAuthorization.class, LoginPage.class) {
+			@Override
+			protected boolean isAuthorized() {
+				final StoredUser storedUser = ((CheesrSession) Session.get()).getUser();
+				return storedUser != null && storedUser.isActive() && storedUser.isAdmin();
+			}
+		});
+		getSecuritySettings().setAuthorizationStrategy(strategy);
 	}
 
 	@Override

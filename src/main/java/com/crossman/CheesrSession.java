@@ -1,5 +1,6 @@
 package com.crossman;
 
+import com.crossman.v2.StoredUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.wicket.Request;
@@ -11,7 +12,7 @@ public class CheesrSession extends WebSession {
 
 	@Getter
 	@Setter
-	private String username;
+	private StoredUser user;
 
 	protected CheesrSession(Request request) {
 		super(request);

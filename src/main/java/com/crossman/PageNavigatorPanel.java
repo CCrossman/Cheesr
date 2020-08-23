@@ -34,5 +34,12 @@ public class PageNavigatorPanel extends Panel {
 				setResponsePage(SignupPage.class);
 			}
 		});
+
+		add(new Link("users") {
+			@Override
+			public void onClick() {
+				setResponsePage(UserPage.class);
+			}
+		});
 	}
 }

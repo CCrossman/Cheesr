@@ -1,5 +1,7 @@
 package com.crossman;
 
+import com.crossman.v2.StoredUser;
+import com.crossman.v2.UserRepository;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -8,6 +10,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.Optional;
 
 public class LoginPage extends CheesrPage {
 
@@ -26,6 +30,7 @@ public class LoginPage extends CheesrPage {
 
 				final Encryptor encryptor = WicketApplication.getInjector().getInstance(Encryptor.class);
 				final Sql2o sql2o = WicketApplication.getInjector().getInstance(Sql2o.class);
+				final UserRepository userRepository = WicketApplication.getInjector().getInstance(UserRepository.class);
 
 				final String username = usr.getModelObjectAsString();
 				try (Connection c = sql2o.open()) {
@@ -40,8 +45,15 @@ public class LoginPage extends CheesrPage {
 						pp.add("message", "User '" + username + "' not found or incorrect password");
 						setResponsePage(LoginPage.class, pp);
 					} else {
-						getCheesrSession().setUsername(username);
-						setResponsePage(HomePage.class);
+						final Optional<StoredUser> byName = userRepository.findByName(username);
+						if (byName.isPresent()) {
+							getCheesrSession().setUser(byName.get());
+							setResponsePage(HomePage.class);
+						} else {
+							PageParameters pp = new PageParameters();
+							pp.add("message", "User '" + username + "' found but... not found?!?");
+							setResponsePage(LoginPage.class, pp);
+						}
 					}
 				} catch (Exception ex) {
 					PageParameters pp = new PageParameters();

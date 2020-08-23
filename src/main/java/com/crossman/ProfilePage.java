@@ -31,7 +31,7 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 
 		try (Connection c = WicketApplication.getInjector().getInstance(Sql2o.class).open()) {
 			final List<Address> addresses = c.createQuery("SELECT kind, name, street, city, state, zip from addresses where username = :usr")
-					.addParameter("usr", getCheesrSession().getUsername())
+					.addParameter("usr", getCheesrSession().getUser().getName())
 					.executeAndFetch(AddressResultSetHandler.instance);
 
 			ListView listView = new ListView("addresses", addresses) {
@@ -74,7 +74,7 @@ public final class ProfilePage extends CheesrPage implements IRequireAuthorizati
 					final String zip = tfZip.getModelObjectAsString();
 
 					c.createQuery("INSERT INTO addresses (username, kind, name, street, city, state, zip) VALUES (:usr, :kind, :name, :street, :city, :state, :zip) ON CONFLICT (username, kind) DO UPDATE SET name = :name, street = :street, city = :city, state = :state, zip = :zip")
-								.addParameter("usr", getCheesrSession().getUsername())
+								.addParameter("usr", getCheesrSession().getUser().getName())
 								.addParameter("name", name)
 								.addParameter("kind", addressType)
 								.addParameter("street", street)
