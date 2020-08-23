@@ -40,6 +40,24 @@ public class PageNavigatorPanel extends Panel {
 			public void onClick() {
 				setResponsePage(UserPage.class);
 			}
+
+			@Override
+			public boolean isVisible() {
+				final CheesrSession session = getCheesrSession();
+				return session != null && session.getUser() != null && session.getUser().isAdmin();
+			}
 		});
+
+		add(new Link("logoff") {
+			@Override
+			public void onClick() {
+				getCheesrSession().setUser(null);
+				setResponsePage(LoginPage.class);
+			}
+		});
+	}
+
+	private CheesrSession getCheesrSession() {
+		return ((CheesrPage) PageNavigatorPanel.this.getParent()).getCheesrSession();
 	}
 }

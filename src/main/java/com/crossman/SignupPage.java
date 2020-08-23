@@ -1,7 +1,6 @@
 package com.crossman;
 
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -10,9 +9,11 @@ import org.apache.wicket.model.Model;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-public class SignupPage extends WebPage {
+public class SignupPage extends CheesrPage {
 
-	public SignupPage() {
+	public SignupPage(PageParameters pp) {
+		super(pp);
+
 		add(new FeedbackPanel("feedback"));
 
 		final TextField usr = new TextField("usr", new Model());
