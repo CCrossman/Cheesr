@@ -6,6 +6,8 @@ import com.crossman.v1.DefaultAddressShower;
 import com.crossman.v1.DefaultCheeseListShower;
 import com.crossman.v2.CheesrProduct;
 import com.crossman.v2.DefaultCheesrProductListShower;
+import com.crossman.v2.DefaultUserRepository;
+import com.crossman.v2.UserRepository;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import org.slf4j.Logger;
@@ -55,5 +57,8 @@ public final class WicketApplicationModule extends AbstractModule {
 		bind(new Key<Show<Address>>() {}).toInstance(DefaultAddressShower.instance);
 		bind(new Key<Show<List<Cheese>>>() {}).toInstance(DefaultCheeseListShower.instance);
 		bind(new Key<Show<List<CheesrProduct>>>() {}).toInstance(DefaultCheesrProductListShower.instance);
+
+		// bind repositories
+		bind(UserRepository.class).to(DefaultUserRepository.class);
 	}
 }
